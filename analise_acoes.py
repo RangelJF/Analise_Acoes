@@ -5,8 +5,18 @@ import matplotlib.pyplot as plt
 # Definição dos tickers das ações para análise
 tickers = ["AAPL", "MSFT", "TSLA"]
 
-# Baixando os dados históricos do Yahoo Finance
-data = yf.download(tickers, start="2020-01-01", end="2024-03-20")['Adj Close']
+# Baixando os dados históricos do Yahoo Finance com auto_adjust=False
+data = yf.download(tickers, start="2020-01-01", end="2024-03-20", auto_adjust=False)
+
+# Verificando as colunas do DataFrame para garantir que 'Adj Close' existe
+print(data.columns)
+
+# Verificando se a coluna 'Adj Close' está presente
+if 'Adj Close' in data.columns.levels[0]:
+    data = data['Adj Close']
+else:
+    # Se 'Adj Close' não estiver disponível, usaremos 'Close'
+    data = data['Close']
 
 # Salvando os dados em CSV para inclusão no repositório
 data.to_csv("dados_acoes.csv")
